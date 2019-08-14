@@ -118,7 +118,7 @@
   </dependencies>
 
   <build>
-    <testSourceDirectory>${project.basedir}/src/test/groovy</testSourceDirectory>
+    <testSourceDirectory>${project.basedir}/src/test/java</testSourceDirectory>
 
     <plugins>
       <plugin>
@@ -255,12 +255,6 @@
               <directory>${project.basedir}/src/test/groovy</directory>
               <includes>
                 <include>**/*.groovy</include>
-              </includes>
-            </testSource>
-            <testSource>
-              <directory>${project.basedir}/src/test/java</directory>
-              <includes>
-                <include>**/*.java</include>
               </includes>
             </testSource>
           </testSources>
