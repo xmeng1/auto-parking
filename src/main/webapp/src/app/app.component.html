@@ -1,0 +1,20 @@
+<!--The content below is only a placeholder and can be replaced.-->
+<script src="app.component.ts"></script>
+<ul style="z-index: 1000">
+  <li><a class="active" href="#home">Home</a></li>
+  <li><a href="/swagger-ui.html">Swagger UI</a></li>
+  <li><a href="https://github.com/xmeng1/auto-parking/blob/master/README.md">Document</a></li>
+  <li><a href="https://github.com/xmeng1/auto-parking">GitHub</a></li>
+  <li style="float:right; padding-right: 20px;"><a (click)="openDialog()">About</a></li>
+</ul>
+
+<router-outlet></router-outlet>
+<div style="padding:20px;margin-top:30px;">
+</div>
+<div style="float: right">
+  <p>version: {{version}}</p>
+  <p>build time: {{buildTime}}</p>
+  <p>commit abbrev : {{commitIdAbbrev}}</p>
+  <p>commit time: {{commitTime}}</p>
+
+</div>
