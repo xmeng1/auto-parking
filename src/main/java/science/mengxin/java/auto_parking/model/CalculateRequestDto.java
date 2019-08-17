@@ -52,13 +52,13 @@ public class CalculateRequestDto {
     }
 
     public CalculateRequestDto(Integer maxX, Integer maxY, Integer x, Integer y, HeadingStatus headingStatus, String commandListStr, Boolean ignoreUnknownCommand) {
-        this.maxX = maxX;
-        this.maxY = maxY;
-        this.x = x;
-        this.y = y;
-        this.headingStatus = headingStatus;
-        this.commandListStr = commandListStr;
-        this.ignoreUnknownCommand = ignoreUnknownCommand;
+        if (maxX!=null) this.maxX = maxX;
+        if (maxY!=null) this.maxY = maxY;
+        if (x!=null) this.x = x; else this.x = DefaultConfig.DEFAULT_X;
+        if (y!=null) this.y = y; else this.y = DefaultConfig.DEFAULT_Y;
+        if (headingStatus!=null) this.headingStatus = headingStatus;
+        if (commandListStr!=null) this.commandListStr = commandListStr; else this.commandListStr="";
+        if (ignoreUnknownCommand!=null) this.ignoreUnknownCommand = ignoreUnknownCommand;
     }
 
     public CalculateRequestDto() {
