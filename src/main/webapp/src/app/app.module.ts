@@ -7,7 +7,6 @@ import {MatButtonModule, MatChipsModule, MatSelectModule, MatIconModule} from '@
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {MatFileUploadModule} from 'angular-material-fileupload';
-import {ApiModule, BASE_PATH, Configuration, ConfigurationParameters} from './segregator-ts-api';
 import {HttpClientModule} from '@angular/common/http';
 import {LoggerModule, NgxLoggerLevel} from 'ngx-logger';
 import {MatAutocompleteModule} from '@angular/material/autocomplete';
@@ -50,7 +49,6 @@ import {environment} from "../environments/environment";
     ReactiveFormsModule,
     BrowserAnimationsModule,
     MatFileUploadModule,
-    ApiModule,
     // make sure to import the HttpClientModule in the AppModule only,
     // see https://github.com/angular/angular/issues/20575
     HttpClientModule,
@@ -61,7 +59,6 @@ import {environment} from "../environments/environment";
     })
   ],
   entryComponents: [AboutDialog],
-  providers: [{ provide: BASE_PATH, useValue: environment.API_BASE_PATH }],
   bootstrap: [AppComponent]
 })
 export class AppModule {
