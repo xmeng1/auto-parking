@@ -11,44 +11,7 @@ import spock.lang.Specification
 import spock.lang.Unroll
 
 import static java.util.Optional.of
-import static java.util.Optional.of
-import static java.util.Optional.of
-import static java.util.Optional.of
-import static java.util.Optional.of
-import static science.mengxin.java.auto_parking.model.Command.F
-import static science.mengxin.java.auto_parking.model.Command.F
-import static science.mengxin.java.auto_parking.model.Command.F
-import static science.mengxin.java.auto_parking.model.Command.F
-import static science.mengxin.java.auto_parking.model.Command.F
-import static science.mengxin.java.auto_parking.model.Command.F
-import static science.mengxin.java.auto_parking.model.Command.F
-import static science.mengxin.java.auto_parking.model.Command.F
-import static science.mengxin.java.auto_parking.model.Command.F
-import static science.mengxin.java.auto_parking.model.Command.F
-import static science.mengxin.java.auto_parking.model.Command.F
-import static science.mengxin.java.auto_parking.model.Command.F
-import static science.mengxin.java.auto_parking.model.Command.F
-import static science.mengxin.java.auto_parking.model.Command.F
-import static science.mengxin.java.auto_parking.model.Command.F
-import static science.mengxin.java.auto_parking.model.Command.F
-import static science.mengxin.java.auto_parking.model.Command.F
-import static science.mengxin.java.auto_parking.model.Command.F
-import static science.mengxin.java.auto_parking.model.Command.F
-import static science.mengxin.java.auto_parking.model.Command.F
-import static science.mengxin.java.auto_parking.model.Command.L
-import static science.mengxin.java.auto_parking.model.Command.L
-import static science.mengxin.java.auto_parking.model.Command.L
-import static science.mengxin.java.auto_parking.model.Command.L
-import static science.mengxin.java.auto_parking.model.Command.L
-import static science.mengxin.java.auto_parking.model.Command.L
-import static science.mengxin.java.auto_parking.model.Command.L
-import static science.mengxin.java.auto_parking.model.Command.L
-import static science.mengxin.java.auto_parking.model.Command.L
-import static science.mengxin.java.auto_parking.model.Command.R
-import static science.mengxin.java.auto_parking.model.Command.R
-import static science.mengxin.java.auto_parking.model.Command.R
-import static science.mengxin.java.auto_parking.model.Command.R
-import static science.mengxin.java.auto_parking.model.Command.R
+import static science.mengxin.java.auto_parking.model.Command.*
 
 @SpringBootTest
 class AutoParkingServiceImplSpec extends Specification {
@@ -73,8 +36,14 @@ class AutoParkingServiceImplSpec extends Specification {
     @Shared
     def FLFLFFRFFF = of([F, L, F, L, F, F, R, F, F, F])
 
-    def req(int x, int y, Optional<List<Command>> commandList) {
-        new CalculateRequest(new CarParkLocation(x, y), commandList.get())
+    def req(Integer x, Integer y, Optional<List<Command>> commandList) {
+        if (x == null || y == null) {
+            return new CalculateRequest(null, commandList.get())
+        }
+        if (!commandList.isPresent()) {
+            return new CalculateRequest(new CarParkLocation(x, y), null)
+        }
+        return new CalculateRequest(new CarParkLocation(x, y), commandList.get())
     }
 
     @Unroll("""
@@ -88,7 +57,12 @@ calculate the find location request : #request and result #expectedResult
         then: "result should be as expected"
         result == expectedResult
         where: "the scenarios list"
-        request                               || expectedResult                                     | description
-        req(5, 5, RFLFRFLF)                   || of(new CarParkLocation(7, 7, HeadingStatus.North)) | "basic example"
+        request                     || expectedResult                                     | description
+        req(5, 5, RFLFRFLF)         || of(new CarParkLocation(7, 7, HeadingStatus.North)) | "basic example"
+        req(6, 6, FFLFFLFFLFF)      || of(new CarParkLocation(6, 6, HeadingStatus.East))  | "basic example"
+        req(5, 5, FLFLFFRFFF)       || of(new CarParkLocation(4, 1, HeadingStatus.West))  | "basic example"
+        null                        || Optional.empty()                                   | "null example"
+        req(null, null, RFLFRFLF)   || Optional.empty()                                   | "null example"
+        req(5, 5, Optional.empty()) || Optional.empty()                                   | "null example"
     }
 }
