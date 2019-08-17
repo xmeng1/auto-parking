@@ -68,6 +68,27 @@ class CarParkLocationTest extends Specification {
     @Shared
     def carParkLocationEast56 = new CarParkLocation(5, 6, HeadingStatus.East)
 
+    // We handle null in the CarParkLocation, so it cannot be set to null or initial with null.
+   /* @Shared
+    def carParkLocationWithoutHeading = new CarParkLocation(5, 6)
+
+    def "car park location heading set to null"() {
+        given: "car park location heading set to null"
+        carParkLocationWithoutHeading.setHeadingStatus(null)
+
+        when: "handle any command, return same"
+        def resultForward = carParkLocationWithoutHeading.handleForward()
+        def resultLeft = carParkLocationWithoutHeading.handleLeft()
+        def resultRight = carParkLocationWithoutHeading.handleRight()
+
+        then: "should same"
+        resultForward == carParkLocationWithoutHeading
+        resultLeft == carParkLocationWithoutHeading
+        resultRight == carParkLocationWithoutHeading
+
+    }*/
+
+
     @Unroll("""
 #description current location: #current with command forward and result #expectedResult
 """)

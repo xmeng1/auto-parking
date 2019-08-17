@@ -5,6 +5,7 @@ import java.util.Objects;
 public class CarParkLocation {
     private Integer x;
     private Integer y;
+    // this status cannot be null always, default value is HeadingStatus.North.
     private HeadingStatus headingStatus;
     public CarParkLocation(Integer x, Integer y) {
         this.x = x;
@@ -15,7 +16,11 @@ public class CarParkLocation {
     public CarParkLocation(Integer x, Integer y, HeadingStatus headingStatus) {
         this.x = x;
         this.y = y;
-        this.headingStatus = headingStatus;
+        if (headingStatus != null) {
+            this.headingStatus = headingStatus;
+        }else{
+            this.headingStatus = HeadingStatus.North;
+        }
     }
 
     /**
@@ -97,7 +102,9 @@ public class CarParkLocation {
     }
 
     public void setHeadingStatus(HeadingStatus headingStatus) {
-        this.headingStatus = headingStatus;
+        if (headingStatus != null) {
+            this.headingStatus = headingStatus;
+        }
     }
 
     @Override
