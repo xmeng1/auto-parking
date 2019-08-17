@@ -1,9 +1,8 @@
 package science.mengxin.java.auto_parking.model;
 
-import io.swagger.models.auth.In;
+class DefaultConfig {
+    static Integer DEFAULT_MAX_X = 15;
+    static Integer DEFAULT_MAX_Y = 15;
 
-public class DefaultConfig {
-    public static Integer DEFAULT_MAX_X = 15;
-    public static Integer DEFAULT_MAX_Y = 15;
-
+    static HeadingStatus DEFAULT_HEADING = HeadingStatus.North;
 }

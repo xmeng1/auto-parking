@@ -1,5 +1,7 @@
 package science.mengxin.java.auto_parking.model;
 
+import static science.mengxin.java.auto_parking.model.DefaultConfig.DEFAULT_HEADING;
+
 import java.util.Objects;
 
 public class CarParkLocation {
@@ -10,7 +12,7 @@ public class CarParkLocation {
     public CarParkLocation(Integer x, Integer y) {
         this.x = x;
         this.y = y;
-        this.headingStatus = HeadingStatus.North;
+        this.headingStatus = DEFAULT_HEADING;
     }
 
     public CarParkLocation(Integer x, Integer y, HeadingStatus headingStatus) {
@@ -19,7 +21,7 @@ public class CarParkLocation {
         if (headingStatus != null) {
             this.headingStatus = headingStatus;
         }else{
-            this.headingStatus = HeadingStatus.North;
+            this.headingStatus = DEFAULT_HEADING;
         }
     }
 
