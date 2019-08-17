@@ -1,0 +1,13 @@
+export * from './autoParkingController.service';
+import { AutoParkingControllerService } from './autoParkingController.service';
+export * from './basicErrorController.service';
+import { BasicErrorControllerService } from './basicErrorController.service';
+export * from './homeController.service';
+import { HomeControllerService } from './homeController.service';
+export * from './operationHandler.service';
+import { OperationHandlerService } from './operationHandler.service';
+export * from './versionController.service';
+import { VersionControllerService } from './versionController.service';
+export * from './webMvcLinksHandler.service';
+import { WebMvcLinksHandlerService } from './webMvcLinksHandler.service';
+export const APIS = [AutoParkingControllerService, BasicErrorControllerService, HomeControllerService, OperationHandlerService, VersionControllerService, WebMvcLinksHandlerService];
