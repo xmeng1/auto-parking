@@ -59,6 +59,8 @@ totalCommitCount: "29"
   commitIdAbbrev = '';
   commitTime = '';
   buildTime = '';
+  private numbersX: number[];
+  private numbersY: number[];
 
   constructor(private versionControllerService: VersionControllerService,
               private logger: NGXLogger,
@@ -70,17 +72,19 @@ totalCommitCount: "29"
       this.commitTime = res.result['commitTime'];
       this.buildTime = res.result['buildTime'];
     });
+
+    this.numbersX = Array(this.maxX).fill(1).map((x,i)=>i+1);
+    this.numbersY = Array(this.maxY).fill(1).map((x,i)=>i+1);
   }
 
-  title = 'auto-parking';
-
+  title = 'Auto-Parking System';
+  maxX = 15;
+  maxY = 15;
+  x = 0;
+  y = 0;
+  commandStr = "";
   ngOnInit() {
   }
-
-  selectable = true;
-  removable = false;
-  fruitCtrl = new FormControl();
-  selectedLang: string[] = [];
 
   openDialog(): void {
     const dialogRef = this.dialog.open(AboutDialog, {
@@ -92,6 +96,27 @@ totalCommitCount: "29"
     dialogRef.afterClosed().subscribe(result => {
       console.log('The dialog was closed');
     });
+  }
+
+  onFClick() {
+    this.commandStr = this.commandStr + "F";
+  }
+
+  onLClick() {
+    this.commandStr = this.commandStr + "L";
+  }
+  onRClick() {
+    this.commandStr = this.commandStr + "R";
+  }
+
+
+
+  onDeleteClick() {
+    this.commandStr  = this.commandStr.slice(0, -1);
+  }
+
+  onClearClick() {
+    this.commandStr  = "";
   }
 }
 

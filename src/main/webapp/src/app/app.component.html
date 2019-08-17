@@ -10,6 +10,56 @@
 
 <router-outlet></router-outlet>
 <div style="padding:20px;margin-top:30px;">
+  <mat-grid-list cols="6" rowHeight="4:1" >
+    <mat-grid-tile colspan="6">
+      <div style="text-align:center">
+        <h1>
+          Welcome to {{title}}!
+        </h1>
+      </div>
+    </mat-grid-tile>
+    <mat-grid-tile colspan="1"  class="setting-bottom" >
+      <mat-form-field>
+        <mat-label>initial X coordinate</mat-label>
+        <mat-select>
+          <mat-option *ngFor="let number of numbersX" [value]="number">
+            {{number}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </mat-grid-tile>
+    <mat-grid-tile colspan="1" class="setting-bottom">
+      <mat-form-field>
+        <mat-label>initial Y coordinate</mat-label>
+        <mat-select>
+          <mat-option *ngFor="let number of numbersY" [value]="number">
+            {{number}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </mat-grid-tile>
+    <mat-grid-tile colspan="4" class="setting-bottom">
+      <mat-chip-list>
+        <mat-chip color="primary" (click)="onFClick()">F</mat-chip>
+        <mat-chip color="primary" (click)="onLClick()">L</mat-chip>
+        <mat-chip color="primary" (click)="onRClick()">R</mat-chip>
+      </mat-chip-list>
+      <mat-form-field class="example-full-width">
+        <label>
+          <input [disabled]="true" matInput placeholder="Construct Command List" value="{{commandStr}}">
+        </label>
+      </mat-form-field>
+      <button mat-raised-button (click)="onDeleteClick()">Delete</button>
+      <button mat-raised-button (click)="onClearClick()">Clear</button>
+    </mat-grid-tile>
+    <mat-grid-tile colspan="2"  class="setting-bottom" >
+      <button mat-raised-button>Start to calculate</button>
+    </mat-grid-tile>
+    <mat-grid-tile colspan="4"  class="setting-bottom" >
+        Result
+    </mat-grid-tile>
+  </mat-grid-list>
+
 </div>
 <div style="float: right">
   <p>version: {{version}}</p>
