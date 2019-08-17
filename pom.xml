@@ -197,9 +197,19 @@
         <version>2.2.6</version>
         <executions>
           <execution>
+            <id>get-the-git-infos</id>
+            <phase>initialize</phase>
             <goals>
               <goal>revision</goal>
             </goals>
+          </execution>
+          <execution>
+            <id>validate-the-git-infos</id>
+            <goals>
+              <goal>validateRevision</goal>
+            </goals>
+            <!-- *NOTE*: The default phase of validateRevision is verify, but in case you want to change it, you can do so by adding the phase here -->
+            <phase>package</phase>
           </execution>
         </executions>
         <configuration>
@@ -273,6 +283,16 @@
             <include>**/*Test.*</include>
             <include>**/*Spec.*</include>
           </includes>
+        </configuration>
+      </plugin>
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>3.6.1</version>
+        <configuration>
+          <source>${java.version}</source>
+          <target>${java.version}</target>
         </configuration>
       </plugin>
     </plugins>

@@ -2,6 +2,14 @@
 
 ## Introduction
 
+### Algorithm
+
+![](https://raw.githubusercontent.com/xmeng1/images/master/images/20190817102722.png)
+
+
+
+
+
 ## Heroku Instance
 
 I have deployed the application to the Heroku (free Dyno):
