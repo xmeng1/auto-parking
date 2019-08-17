@@ -1,15 +1,16 @@
 package science.mengxin.java.auto_parking.utilities;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import science.mengxin.java.auto_parking.model.Command;
-import science.mengxin.java.auto_parking.service.AutoParkingServiceImpl;
-
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import org.apache.commons.lang3.tuple.ImmutablePair;
+import org.apache.commons.lang3.tuple.Pair;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import science.mengxin.java.auto_parking.model.Command;
+import science.mengxin.java.auto_parking.service.AutoParkingServiceImpl;
 
 public class CarParkUtils {
     private static final Logger logger = LoggerFactory.getLogger(AutoParkingServiceImpl.class);
@@ -53,5 +54,28 @@ public class CarParkUtils {
                     }
                 }
         ).filter(Objects::nonNull).collect(Collectors.toList()));
+    }
+
+    static public Pair<Boolean, String> checkCoordinate(Integer x, Integer y, Integer maxX, Integer maxY) {
+        boolean illegalX = false;
+        boolean illegalY = false;
+        if (x < 0 || x > maxX) {
+            illegalX = true;
+        }
+        if (y < 0 || y > maxY) {
+            illegalY = true;
+        }
+        if (!illegalX && !illegalY) {
+            return ImmutablePair.of(true, "");
+        } else {
+            String errorMessage = "The coordination of final location is illegal:";
+            if (illegalX) {
+                errorMessage += "x should be in [0," + maxX + "]";
+            }
+            if (illegalY) {
+                errorMessage += "y should be in [0," + maxY + "]";
+            }
+            return ImmutablePair.of(false, errorMessage);
+        }
     }
 }

@@ -2,6 +2,7 @@ package science.mengxin.java.auto_parking.api;
 
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicLong;
+import org.apache.commons.lang3.tuple.Pair;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.MediaType;
@@ -15,6 +16,7 @@ import science.mengxin.java.auto_parking.model.CalculateRequestDto;
 import science.mengxin.java.auto_parking.model.CarParkLocation;
 import science.mengxin.java.auto_parking.model.basic.Result;
 import science.mengxin.java.auto_parking.service.AutoParkingService;
+import science.mengxin.java.auto_parking.utilities.CarParkUtils;
 
 @RestController
 @V1APIController
@@ -44,19 +46,25 @@ public class AutoParkingController {
 
     }
 
-  @PostMapping(value = "/findLocation", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-  @CrossOrigin(origins = "http://localhost:4200")
-  @ResponseBody
-  public Result<CarParkLocation> findLocation(@RequestBody CalculateRequestDto requestDto) {
-    Optional<CalculateRequest> calculateRequestOptional = requestDto.toCalculateRequest();
-    if (!calculateRequestOptional.isPresent()) {
-      return Result.build(900, "Invalid input of request Dto", null);
-    }
-    Optional<CarParkLocation> calculateResult =
-            autoParkingService.calculateFinalLocation(calculateRequestOptional.get());
-    return calculateResult.map(Result::ok)
-            .orElseGet(() -> Result.build(901, "Cannot find the final location", null));
+    @PostMapping(value = "/findLocation", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @CrossOrigin(origins = "http://localhost:4200")
+    @ResponseBody
+    public Result<CarParkLocation> findLocation(@RequestBody CalculateRequestDto requestDto) {
+        Optional<CalculateRequest> calculateRequestOptional = requestDto.toCalculateRequest();
+        if (!calculateRequestOptional.isPresent()) {
+            return Result.build(900, "Invalid input of request Dto", null);
+        }
+        Optional<CarParkLocation> calculateResult =
+                autoParkingService.calculateFinalLocation(calculateRequestOptional.get());
+        return calculateResult.map(l -> {
+            Pair<Boolean, String> checkResult = CarParkUtils.checkCoordinate(l.getX(), l.getY(), requestDto.getMaxX(), requestDto.getMaxY());
+            if (checkResult.getLeft()) {
+                return Result.ok(l);
+            }else {
+                return Result.build(901, checkResult.getRight(), l);
+            }
+        }).orElseGet(() -> Result.build(902, "Cannot find the final location", null));
 
-  }
+    }
 
 }
