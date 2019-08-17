@@ -15,6 +15,7 @@ import {map, startWith} from 'rxjs/operators';
 import {MatSelectChange} from "@angular/material/typings/esm5/select";
 import {Title} from "@angular/platform-browser";
 import {HttpEvent, HttpEventType} from "@angular/common/http";
+import {VersionControllerService, ResultGitVersion} from './auto-parking-ts-api';
 
 @Component({
   selector: 'app-root',
@@ -58,12 +59,21 @@ totalCommitCount: "29"
   commitIdAbbrev = '';
   commitTime = '';
   buildTime = '';
-  constructor(
+
+  constructor(private versionControllerService: VersionControllerService,
               private logger: NGXLogger,
               public dialog: MatDialog) {
+    versionControllerService.getVersionUsingGET().subscribe((res: ResultGitVersion) => {
+      this.logger.debug("get the version result", res);
+      this.version = res.result['buildVersion'];
+      this.commitIdAbbrev = res.result['commitIdAbbrev'];
+      this.commitTime = res.result['commitTime'];
+      this.buildTime = res.result['buildTime'];
+    });
   }
 
   title = 'auto-parking';
+
   ngOnInit() {
   }
 
@@ -97,7 +107,8 @@ export interface DialogData {
 export class AboutDialog {
   constructor(
     public dialogRef: MatDialogRef<AboutDialog>,
-    @Inject(MAT_DIALOG_DATA) public data: DialogData) {}
+    @Inject(MAT_DIALOG_DATA) public data: DialogData) {
+  }
 
   onNoClick(): void {
     this.dialogRef.close();

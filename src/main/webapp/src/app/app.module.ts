@@ -17,6 +17,7 @@ import {MatCardModule} from '@angular/material/card';
 import {MatDialogModule} from '@angular/material/dialog';
 import {MatInputModule} from '@angular/material';
 import {environment} from "../environments/environment";
+import { ApiModule, BASE_PATH } from './auto-parking-ts-api';
 // configuring providers
 
 // export function apiConfigFactory(): Configuration => {
@@ -49,6 +50,7 @@ import {environment} from "../environments/environment";
     ReactiveFormsModule,
     BrowserAnimationsModule,
     MatFileUploadModule,
+    ApiModule,
     // make sure to import the HttpClientModule in the AppModule only,
     // see https://github.com/angular/angular/issues/20575
     HttpClientModule,
@@ -59,6 +61,7 @@ import {environment} from "../environments/environment";
     })
   ],
   entryComponents: [AboutDialog],
+  providers: [{ provide: BASE_PATH, useValue: environment.API_BASE_PATH }],
   bootstrap: [AppComponent]
 })
 export class AppModule {
