@@ -87,15 +87,15 @@ export class OperationHandlerService {
         if (httpContentTypeSelected != undefined) {
             headers = headers.set('Content-Type', httpContentTypeSelected);
         }
-
-        return this.httpClient.get<any>(`${this.basePath}/actuator/health/${encodeURIComponent(String(component))}/${encodeURIComponent(String(instance))}`,
+        return null;
+        /*return this.httpClient.get<any>(`${this.basePath}/actuator/health/${encodeURIComponent(String(component))}/${encodeURIComponent(String(instance))}`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
                 observe: observe,
                 reportProgress: reportProgress
             }
-        );
+        );*/
     }
 
     /**
@@ -131,14 +131,15 @@ export class OperationHandlerService {
             headers = headers.set('Content-Type', httpContentTypeSelected);
         }
 
-        return this.httpClient.get<any>(`${this.basePath}/actuator/health/${encodeURIComponent(String(component))}`,
+        return null;
+        /*return this.httpClient.get<any>(`${this.basePath}/actuator/health/${encodeURIComponent(String(component))}`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
                 observe: observe,
                 reportProgress: reportProgress
             }
-        );
+        );*/
     }
 
     /**
