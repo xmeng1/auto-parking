@@ -59,21 +59,25 @@ public class CarParkUtils {
     static public Pair<Boolean, String> checkCoordinate(Integer x, Integer y, Integer maxX, Integer maxY) {
         boolean illegalX = false;
         boolean illegalY = false;
-        if (x < 0 || x > maxX) {
+        if (x <= 0 || x > maxX) {
             illegalX = true;
         }
-        if (y < 0 || y > maxY) {
+        if (y <= 0 || y > maxY) {
             illegalY = true;
         }
         if (!illegalX && !illegalY) {
             return ImmutablePair.of(true, "");
         } else {
-            String errorMessage = "The coordination of final location is illegal:";
+            String errorMessage = "The coordination of location (" +
+                    x +
+                    "," +
+                    y +
+                    ") is illegal:";
             if (illegalX) {
-                errorMessage += "x should be in [0," + maxX + "]";
+                errorMessage += "x should be in [1," + maxX + "]";
             }
             if (illegalY) {
-                errorMessage += "y should be in [0," + maxY + "]";
+                errorMessage += "y should be in [1," + maxY + "]";
             }
             return ImmutablePair.of(false, errorMessage);
         }

@@ -6,7 +6,6 @@ import {AppComponent, AboutDialog, ReversePipe} from './app.component';
 import {MatButtonModule, MatChipsModule, MatSelectModule, MatIconModule, MatListModule} from '@angular/material';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import {MatFileUploadModule} from 'angular-material-fileupload';
 import {HttpClientModule} from '@angular/common/http';
 import {LoggerModule, NgxLoggerLevel} from 'ngx-logger';
 import {MatAutocompleteModule} from '@angular/material/autocomplete';
@@ -50,7 +49,6 @@ import { ApiModule, BASE_PATH } from './auto-parking-ts-api';
     FormsModule,
     ReactiveFormsModule,
     BrowserAnimationsModule,
-    MatFileUploadModule,
     ApiModule,
     // make sure to import the HttpClientModule in the AppModule only,
     // see https://github.com/angular/angular/issues/20575

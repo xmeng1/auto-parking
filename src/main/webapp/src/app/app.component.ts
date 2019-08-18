@@ -31,8 +31,8 @@ import HeadingStatusEnum = CarParkLocation.HeadingStatusEnum;
 })
 export class AppComponent implements OnInit {
 
-  private numbersX: number[];
-  private numbersY: number[];
+  numbersX: number[];
+  numbersY: number[];
 
   // visualization for finding process
   cellStr: string[][];

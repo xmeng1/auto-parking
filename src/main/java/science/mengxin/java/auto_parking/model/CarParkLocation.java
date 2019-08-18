@@ -9,6 +9,8 @@ public class CarParkLocation {
     private Integer y;
     // this status cannot be null always, default value is HeadingStatus.North.
     private HeadingStatus headingStatus;
+    private String lastHistoryErrorMessage;
+
     public CarParkLocation(Integer x, Integer y) {
         this.x = x;
         this.y = y;
@@ -25,6 +27,21 @@ public class CarParkLocation {
         }
     }
 
+    public CarParkLocation(Integer x, Integer y, HeadingStatus headingStatus, String lastHistoryErrorMessage) {
+        this.x = x;
+        this.y = y;
+        this.headingStatus = headingStatus;
+        this.lastHistoryErrorMessage = lastHistoryErrorMessage;
+    }
+
+    public String getLastHistoryErrorMessage() {
+        return lastHistoryErrorMessage;
+    }
+
+    public void setLastHistoryErrorMessage(String lastHistoryErrorMessage) {
+        this.lastHistoryErrorMessage = lastHistoryErrorMessage;
+    }
+
     /**
      * handle command F (forward), heading not change, coordination update
      * @return Next CarParkLocation
@@ -32,13 +49,13 @@ public class CarParkLocation {
     public CarParkLocation handleForward() {
         switch (headingStatus) {
             case North:
-                return new CarParkLocation(this.x + 1, this.y, this.headingStatus);
+                return new CarParkLocation(this.x + 1, this.y, this.headingStatus, this.lastHistoryErrorMessage);
             case South:
-                return new CarParkLocation(this.x - 1, this.y, this.headingStatus);
+                return new CarParkLocation(this.x - 1, this.y, this.headingStatus, this.lastHistoryErrorMessage);
             case West:
-                return new CarParkLocation(this.x, this.y-1, this.headingStatus);
+                return new CarParkLocation(this.x, this.y-1, this.headingStatus, this.lastHistoryErrorMessage);
             case East:
-                return new CarParkLocation(this.x, this.y+1, this.headingStatus);
+                return new CarParkLocation(this.x, this.y+1, this.headingStatus, this.lastHistoryErrorMessage);
             default:
                 return this;
         }
@@ -51,13 +68,13 @@ public class CarParkLocation {
     public CarParkLocation handleLeft() {
         switch (headingStatus) {
             case North:
-                return new CarParkLocation(this.x, this.y, HeadingStatus.West);
+                return new CarParkLocation(this.x, this.y, HeadingStatus.West, this.lastHistoryErrorMessage);
             case South:
-                return new CarParkLocation(this.x, this.y, HeadingStatus.East);
+                return new CarParkLocation(this.x, this.y, HeadingStatus.East, this.lastHistoryErrorMessage);
             case West:
-                return new CarParkLocation(this.x, this.y, HeadingStatus.South);
+                return new CarParkLocation(this.x, this.y, HeadingStatus.South, this.lastHistoryErrorMessage);
             case East:
-                return new CarParkLocation(this.x, this.y, HeadingStatus.North);
+                return new CarParkLocation(this.x, this.y, HeadingStatus.North, this.lastHistoryErrorMessage);
             default:
                 return this;
         }
@@ -70,13 +87,13 @@ public class CarParkLocation {
     public CarParkLocation handleRight() {
         switch (headingStatus) {
             case North:
-                return new CarParkLocation(this.x, this.y, HeadingStatus.East);
+                return new CarParkLocation(this.x, this.y, HeadingStatus.East, this.lastHistoryErrorMessage);
             case South:
-                return new CarParkLocation(this.x, this.y, HeadingStatus.West);
+                return new CarParkLocation(this.x, this.y, HeadingStatus.West, this.lastHistoryErrorMessage);
             case West:
-                return new CarParkLocation(this.x, this.y, HeadingStatus.North);
+                return new CarParkLocation(this.x, this.y, HeadingStatus.North, this.lastHistoryErrorMessage);
             case East:
-                return new CarParkLocation(this.x, this.y, HeadingStatus.South);
+                return new CarParkLocation(this.x, this.y, HeadingStatus.South, this.lastHistoryErrorMessage);
             default:
                 return this;
         }

@@ -25,6 +25,17 @@ class AutoParkingServiceImplSpec extends Specification {
     AutoParkingService autoParkingService
 
     @Shared
+    def FFFFFLF = of([F, F, F, F, F, L, F]) // for x out of max
+    @Shared
+    def RFFRF = of([R, F, F, R, F])  // for y out of max
+    @Shared
+    def LFFRF = of([L, F, F, R, F]) // for x out of 1
+    @Shared
+    def LLFFLFF = of([L, L, F, F, L, F, F,]) // for y out of 1
+
+    @Shared
+    def FLF = of([F, L, F])
+    @Shared
     def RFL = of([R, F, L])
     @Shared
     def RL = of([R, L])
@@ -56,13 +67,24 @@ calculate the find location request : #request and result #expectedResult
         def result = autoParkingService.calculateFinalLocation(request)
         then: "result should be as expected"
         result == expectedResult
+        if (hasError) {
+            println(result.get().getLastHistoryErrorMessage())
+            !result.get().getLastHistoryErrorMessage().isEmpty()
+        }
         where: "the scenarios list"
-        request                     || expectedResult                                     | description
-        req(5, 5, RFLFRFLF)         || of(new CarParkLocation(7, 7, HeadingStatus.North)) | "basic example"
-        req(6, 6, FFLFFLFFLFF)      || of(new CarParkLocation(6, 6, HeadingStatus.East))  | "basic example"
-        req(5, 5, FLFLFFRFFF)       || of(new CarParkLocation(4, 1, HeadingStatus.West))  | "basic example"
-        null                        || Optional.empty()                                   | "null example"
-        req(null, null, RFLFRFLF)   || Optional.empty()                                   | "null example"
-        req(5, 5, Optional.empty()) || Optional.empty()                                   | "null example"
+        hasError | request                     || expectedResult                                       | description
+        false    | req(5, 5, RFLFRFLF)         || of(new CarParkLocation(7, 7, HeadingStatus.North))   | "basic example"
+        false    | req(6, 6, FFLFFLFFLFF)      || of(new CarParkLocation(6, 6, HeadingStatus.East))    | "basic example"
+        false    | req(5, 5, FLFLFFRFFF)       || of(new CarParkLocation(4, 1, HeadingStatus.West))    | "basic example"
+        false    | null                        || Optional.empty()                                     | "null example"
+        false    | req(null, null, RFLFRFLF)   || Optional.empty()                                     | "null example"
+        false    | req(5, 5, Optional.empty()) || Optional.empty()                                     | "null example"
+        true     | req(15, 15, FLF)            || of(new CarParkLocation(15, 14, HeadingStatus.West))  | "test middle of command out of max"
+        true     | req(15, 15, FFFFFLF)        || of(new CarParkLocation(15, 14, HeadingStatus.West))  | "test middle of command out of max"
+        true     | req(15, 15, FFFFFLF)        || of(new CarParkLocation(15, 14, HeadingStatus.West))  | "test middle of command out of max"
+        true     | req(15, 15, RFFRF)          || of(new CarParkLocation(14, 15, HeadingStatus.South)) | "test middle of command out of max"
+        true     | req(1, 1, LFFRF)            || of(new CarParkLocation(2, 1, HeadingStatus.North))   | "test middle of command out of max"
+        true     | req(1, 1, LLFFLFF)           || of(new CarParkLocation(1, 3, HeadingStatus.East))    | "test middle of command out of max"
+
     }
 }
