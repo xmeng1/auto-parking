@@ -1,6 +1,6 @@
 <!--The content below is only a placeholder and can be replaced.-->
 <script src="app.component.ts"></script>
-<ul style="z-index: 1000">
+<ul style="z-index: 1000; left: 0px;">
   <li><a class="active" href="#home">Home</a></li>
   <li><a href="/swagger-ui.html">Swagger UI</a></li>
   <li><a href="https://github.com/xmeng1/auto-parking/blob/master/README.md">Document</a></li>
@@ -21,7 +21,7 @@
     <mat-grid-tile colspan="1"  class="setting-bottom" >
       <mat-form-field>
         <mat-label>initial X coordinate</mat-label>
-        <mat-select>
+        <mat-select [(value)]="x">
           <mat-option *ngFor="let number of numbersX" [value]="number">
             {{number}}
           </mat-option>
@@ -31,7 +31,7 @@
     <mat-grid-tile colspan="1" class="setting-bottom">
       <mat-form-field>
         <mat-label>initial Y coordinate</mat-label>
-        <mat-select>
+        <mat-select [(value)]="y">
           <mat-option *ngFor="let number of numbersY" [value]="number">
             {{number}}
           </mat-option>
@@ -53,18 +53,13 @@
       <button mat-raised-button (click)="onClearClick()">Clear</button>
     </mat-grid-tile>
     <mat-grid-tile colspan="2"  class="setting-bottom" >
-      <button mat-raised-button>Start to calculate</button>
+      <button (click)="onStartCalculateClick()" mat-raised-button>Start to calculate</button>
     </mat-grid-tile>
     <mat-grid-tile colspan="4"  class="setting-bottom" >
-        Result
+        {{this.resultStr}}
     </mat-grid-tile>
   </mat-grid-list>
-
-</div>
-<div style="float: right">
-  <p>version: {{version}}</p>
-  <p>build time: {{buildTime}}</p>
-  <p>commit abbrev : {{commitIdAbbrev}}</p>
-  <p>commit time: {{commitTime}}</p>
-
+  <mat-grid-list cols="15" rowHeight="1:1" >
+    <mat-grid-tile *ngFor="let number of numbersX" class="cube-grid">{{number}}</mat-grid-tile>
+  </mat-grid-list>
 </div>

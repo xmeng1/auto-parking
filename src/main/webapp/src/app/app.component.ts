@@ -15,7 +15,12 @@ import {map, startWith} from 'rxjs/operators';
 import {MatSelectChange} from "@angular/material/typings/esm5/select";
 import {Title} from "@angular/platform-browser";
 import {HttpEvent, HttpEventType} from "@angular/common/http";
-import {VersionControllerService, ResultGitVersion} from './auto-parking-ts-api';
+import {
+  VersionControllerService,
+  ResultGitVersion,
+  AutoParkingControllerService,
+  CalculateRequestDto
+} from './auto-parking-ts-api';
 
 @Component({
   selector: 'app-root',
@@ -24,57 +29,15 @@ import {VersionControllerService, ResultGitVersion} from './auto-parking-ts-api'
 })
 export class AppComponent implements OnInit {
 
-  /*
-  branch: "develop"
-​​​​
-buildTime: "2019-03-04T07:34:13+0000"
-​​
-buildVersion: "0.0.1"
-​​
-closestTagCommitCount: ""
-​​
-closestTagName: ""
-​​
-commitId: "06195d9a79883491a99332a96886a5322c78dfb2"
-​​
-commitIdAbbrev: "06195d9"
-​​
-commitIdDescribe: "06195d9-dirty"
-​​
-commitIdDescribeShort: "06195d9-dirty"
-​​
-commitMessageFull: "basic material design work"
-​​
-commitMessageShort: "basic material design work"
-​​
-commitTime: "2019-03-04T07:10:16+0000"
-​​​​
-dirty: "true"
-​​​​
-tags: ""
-​​
-totalCommitCount: "29"
-  * */
-  version = '';
-  commitIdAbbrev = '';
-  commitTime = '';
-  buildTime = '';
   private numbersX: number[];
   private numbersY: number[];
 
-  constructor(private versionControllerService: VersionControllerService,
-              private logger: NGXLogger,
-              public dialog: MatDialog) {
-    versionControllerService.getVersionUsingGET().subscribe((res: ResultGitVersion) => {
-      this.logger.debug("get the version result", res);
-      this.version = res.result['buildVersion'];
-      this.commitIdAbbrev = res.result['commitIdAbbrev'];
-      this.commitTime = res.result['commitTime'];
-      this.buildTime = res.result['buildTime'];
-    });
-
-    this.numbersX = Array(this.maxX).fill(1).map((x,i)=>i+1);
-    this.numbersY = Array(this.maxY).fill(1).map((x,i)=>i+1);
+  constructor(
+    private autoParkingControllerService: AutoParkingControllerService,
+    private logger: NGXLogger,
+    public dialog: MatDialog) {
+    this.numbersX = Array(this.maxX).fill(1).map((x, i) => i + 1);
+    this.numbersY = Array(this.maxY).fill(1).map((x, i) => i + 1);
   }
 
   title = 'Auto-Parking System';
@@ -83,6 +46,7 @@ totalCommitCount: "29"
   x = 0;
   y = 0;
   commandStr = "";
+
   ngOnInit() {
   }
 
@@ -105,21 +69,44 @@ totalCommitCount: "29"
   onLClick() {
     this.commandStr = this.commandStr + "L";
   }
+
   onRClick() {
     this.commandStr = this.commandStr + "R";
   }
 
 
-
   onDeleteClick() {
-    this.commandStr  = this.commandStr.slice(0, -1);
+    this.commandStr = this.commandStr.slice(0, -1);
   }
 
   onClearClick() {
-    this.commandStr  = "";
+    this.commandStr = "";
+  }
+
+  resultStr: String = "";
+  onStartCalculateClick() {
+    this.logger.debug("start to calculate");
+    let dto: CalculateRequestDto = {
+      commandListStr: this.commandStr,
+      x: this.x,
+      y: this.y
+    };
+
+    this.autoParkingControllerService.findLocationUsingPOST(dto).subscribe(
+      res => {
+        this.logger.debug("get the calculate result: ", res);
+        if (res.error == 0) {
+          this.resultStr = "Success! Final location: (" + res.result.x +
+            "," + res.result.y +
+            ") and facing " + res.result.headingStatus;
+        }
+      }
+    )
   }
 }
 
+///////////////////////
+// About Dialog
 export interface DialogData {
   animal: string;
   name: string;
@@ -130,9 +117,22 @@ export interface DialogData {
   templateUrl: 'about-dialog.html',
 })
 export class AboutDialog {
+  version = '';
+  commitIdAbbrev = '';
+  commitTime = '';
+  buildTime = '';
+
   constructor(
     public dialogRef: MatDialogRef<AboutDialog>,
-    @Inject(MAT_DIALOG_DATA) public data: DialogData) {
+    @Inject(MAT_DIALOG_DATA) public data: DialogData,
+    private versionControllerService: VersionControllerService,) {
+
+    versionControllerService.getVersionUsingGET().subscribe((res: ResultGitVersion) => {
+      this.version = res.result['buildVersion'];
+      this.commitIdAbbrev = res.result['commitIdAbbrev'];
+      this.commitTime = res.result['commitTime'];
+      this.buildTime = res.result['buildTime'];
+    });
   }
 
   onNoClick(): void {
