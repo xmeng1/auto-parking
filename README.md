@@ -14,7 +14,9 @@ The project is based on the spring-boot and angular 8. There are several usagesï
 
 Linux
 ```bash  
-./mvnw spring-boot:run  
+./mvnw spring-boot:run
+# or you can use the Makefile: make to run
+make
 ```
 Windows
 ```bash  
