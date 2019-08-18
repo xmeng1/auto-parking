@@ -125,6 +125,13 @@ export class AppComponent implements OnInit {
           this.resultStr = "Success! Final location: (" + res.result.x +
             "," + res.result.y +
             ") and facing " + res.result.headingStatus;
+        }else {
+          this.resultStr = "Failed! Code: " + res.error + "; Message: " + res.message + ".";
+          if (res.result != undefined) {
+            this.resultStr += "Actual final location: (" + res.result.x +
+              "," + res.result.y +
+              ") and facing " + res.result.headingStatus;
+          }
         }
       }
     )
