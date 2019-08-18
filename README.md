@@ -74,6 +74,8 @@ If next command to make the location out of the map (min or max), there will be 
 
 ### Swagger UI try API
  
+![](./doc/swagger-api.png)
+ 
 The backend API [http://localhost:8080/swagger-ui.html#/auto-parking-controller/findLocationUsingPOST](http://localhost:8080/swagger-ui.html#/auto-parking-controller/findLocationUsingPOST) has more options:
 
 Request
