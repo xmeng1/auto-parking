@@ -191,16 +191,32 @@ export class AppComponent implements OnInit {
       case 'F':
         switch (this.currentHeading) {
           case 'North':
-            this.currentX++;
+            if (this.currentX < this.maxX) {
+              this.currentX++;
+            }else{
+              window.alert("Cannot move to North, current x: " + this.currentX + " has reach to max.")
+            }
             break;
           case 'South':
-            this.currentX--;
+            if (this.currentX > 1) {
+              this.currentX--;
+            }else{
+              window.alert("Cannot move to South, current x: " + this.currentX + " has reach to min.")
+            }
             break;
           case 'West':
-            this.currentY--;
+            if (this.currentY > 1) {
+              this.currentY--;
+            }else{
+              window.alert("Cannot move to West, current y: " + this.currentY + " has reach to min.")
+            }
             break;
           case 'East':
-            this.currentY++;
+            if (this.currentY < this.maxX) {
+              this.currentY++;
+            }else{
+              window.alert("Cannot move to East, current Y: " + this.currentY + " has reach to max.")
+            }
             break;
         }
         break;
