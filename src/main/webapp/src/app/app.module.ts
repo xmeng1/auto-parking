@@ -2,8 +2,8 @@ import {BrowserModule} from '@angular/platform-browser';
 import {NgModule} from '@angular/core';
 
 import {AppRoutingModule} from './app-routing.module';
-import {AppComponent, AboutDialog} from './app.component';
-import {MatButtonModule, MatChipsModule, MatSelectModule, MatIconModule} from '@angular/material';
+import {AppComponent, AboutDialog, ReversePipe} from './app.component';
+import {MatButtonModule, MatChipsModule, MatSelectModule, MatIconModule, MatListModule} from '@angular/material';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {MatFileUploadModule} from 'angular-material-fileupload';
@@ -30,7 +30,8 @@ import { ApiModule, BASE_PATH } from './auto-parking-ts-api';
 @NgModule({
   declarations: [
     AppComponent,
-    AboutDialog
+    AboutDialog,
+    ReversePipe
   ],
   imports: [
     BrowserModule,
@@ -58,7 +59,8 @@ import { ApiModule, BASE_PATH } from './auto-parking-ts-api';
       // serverLoggingUrl: '/api/logs',
       level: NgxLoggerLevel.DEBUG,
       serverLogLevel: NgxLoggerLevel.ERROR
-    })
+    }),
+    MatListModule
   ],
   entryComponents: [AboutDialog],
   providers: [{ provide: BASE_PATH, useValue: environment.API_BASE_PATH }],

@@ -1,4 +1,4 @@
-import {Component, Inject, OnChanges, OnInit, SimpleChanges, ViewChild} from '@angular/core';
+import {Component, Inject, OnChanges, OnInit, SimpleChanges, ViewChild, Pipe, PipeTransform} from '@angular/core';
 import {FormControl} from '@angular/forms';
 import {NGXLogger} from "ngx-logger";
 import localeCode from "iso-639-1";
@@ -19,8 +19,10 @@ import {
   VersionControllerService,
   ResultGitVersion,
   AutoParkingControllerService,
-  CalculateRequestDto
+  CalculateRequestDto, CalculateRequest, CarParkLocation
 } from './auto-parking-ts-api';
+import CommandListEnum = CalculateRequest.CommandListEnum;
+import HeadingStatusEnum = CarParkLocation.HeadingStatusEnum;
 
 @Component({
   selector: 'app-root',
@@ -32,20 +34,43 @@ export class AppComponent implements OnInit {
   private numbersX: number[];
   private numbersY: number[];
 
+  // visualization for finding process
+  cellStr: string[][];
+  cellHeading: string[][];
+
+  defaultBgColor = "lightblue";
+  bgColor: string[][] = [];
+  textColor: string[][] = [];
+
   constructor(
     private autoParkingControllerService: AutoParkingControllerService,
     private logger: NGXLogger,
     public dialog: MatDialog) {
     this.numbersX = Array(this.maxX).fill(1).map((x, i) => i + 1);
     this.numbersY = Array(this.maxY).fill(1).map((x, i) => i + 1);
+    this.iniCellStr()
+  }
+
+  iniCellStr() {
+    this.cellStr = [];
+    this.cellHeading = [];
+
+    for (let i = 0; i < this.maxY; i++) {
+      this.cellStr[i] = [];
+      this.cellHeading[i] = [];
+      for (let j = 0; j < this.maxX; j++) {
+        this.cellStr[i][j] = ""
+        this.cellHeading[i][j] = ""
+      }
+    }
   }
 
   title = 'Auto-Parking System';
   maxX = 15;
   maxY = 15;
-  x = 0;
-  y = 0;
-  commandStr = "";
+  x = 5;
+  y = 5;
+  commandStr = "FLFLFFRFFF";
 
   ngOnInit() {
   }
@@ -84,6 +109,7 @@ export class AppComponent implements OnInit {
   }
 
   resultStr: String = "";
+
   onStartCalculateClick() {
     this.logger.debug("start to calculate");
     let dto: CalculateRequestDto = {
@@ -102,6 +128,131 @@ export class AppComponent implements OnInit {
         }
       }
     )
+  }
+
+  simulating: boolean = false;
+  finish: boolean = false;
+
+  currentCommand: CommandListEnum;
+  nextCommand: CommandListEnum;
+  currentHeading: HeadingStatusEnum = HeadingStatusEnum.North;
+  commandsToRun: string = "";
+
+  currentX = 0;
+  currentY = 0;
+
+  getCurrentHeadingImg(): string {
+    //  ← → ↑ ↓
+    switch (this.currentHeading) {
+      case 'North':
+        return "↑";
+      case 'East':
+        return "→";
+      case 'South':
+        return "↓";
+      case 'West':
+        return "←";
+    }
+  }
+
+
+  onStartSimulate() {
+    this.iniCellStr();
+    this.currentX = this.x;
+    this.currentY = this.y;
+    this.cellStr[this.currentX - 1][this.currentY - 1] = "⛩";
+    this.cellHeading[this.currentX - 1][this.currentY - 1] = this.getCurrentHeadingImg();
+    this.commandsToRun = this.commandStr;
+    this.currentHeading = HeadingStatusEnum.North;
+    // this.getNextCommand();
+    this.simulating = true;
+
+  }
+
+  getNextCommand() {
+    this.currentCommand = CommandListEnum[this.commandsToRun.slice(0, 1)];
+    this.commandsToRun = this.commandsToRun.slice(1, this.commandsToRun.length);
+    this.nextCommand = CommandListEnum[this.commandsToRun.slice(0, 1)];
+    this.logger.debug("debug: " + this.currentCommand + " " + this.commandsToRun);
+  }
+
+  onSimulateNext() {
+    // get next string
+    this.getNextCommand();
+    // start to handle the command based on current facing
+    switch (this.currentCommand) {
+      case 'F':
+        switch (this.currentHeading) {
+          case 'North':
+            this.currentX++;
+            break;
+          case 'South':
+            this.currentX--;
+            break;
+          case 'West':
+            this.currentY--;
+            break;
+          case 'East':
+            this.currentY++;
+            break;
+        }
+        break;
+      //  ← → ↑ ↓
+      case 'L':
+        switch (this.currentHeading) {
+          case 'North':
+            this.currentHeading = 'West';
+            // this.cellStr[this.currentX - 1][this.currentY - 1] += (" " + "←");
+            break;
+          case 'South':
+            this.currentHeading = 'East';
+            // this.cellStr[this.currentX - 1][this.currentY - 1] += (" " + "→");
+            break;
+          case 'West':
+            this.currentHeading = 'South';
+            // this.cellStr[this.currentX - 1][this.currentY - 1] += (" " + "↓");
+            break;
+          case 'East':
+            this.currentHeading = 'North';
+            // this.cellStr[this.currentX - 1][this.currentY - 1] += (" " + "↑");
+            break;
+        }
+        break;
+      //  ← → ↑ ↓
+      case 'R':
+        switch (this.currentHeading) {
+          case 'North':
+            this.currentHeading = 'East';
+            // this.cellStr[this.currentX - 1][this.currentY - 1] += (" " + "→");
+            break;
+          case 'South':
+            this.currentHeading = 'West';
+            // this.cellStr[this.currentX - 1][this.currentY - 1] += (" " + "←");
+            break;
+          case 'West':
+            this.currentHeading = 'North';
+            // this.cellStr[this.currentX - 1][this.currentY - 1] += (" " + "↑");
+            break;
+          case 'East':
+            this.currentHeading = 'South';
+            // this.cellStr[this.currentX - 1][this.currentY - 1] += (" " + "↓");
+            break;
+        }
+        break;
+
+    }
+    //🚕 🚖  🚗 🚘
+    this.cellStr[this.currentX - 1][this.currentY - 1] = "🚗";
+    this.cellHeading[this.currentX - 1][this.currentY - 1] = this.getCurrentHeadingImg();
+    if (this.currentCommand == undefined) {
+      this.finish = true;
+      this.cellStr[this.currentX - 1][this.currentY - 1] = "🏁";
+    }
+  }
+
+  reset() {
+    this.simulating = false;
+    this.finish = false;
   }
 }
 
@@ -137,5 +288,13 @@ export class AboutDialog {
 
   onNoClick(): void {
     this.dialogRef.close();
+  }
+}
+
+@Pipe({name: 'reverse'})
+
+export class ReversePipe implements PipeTransform {
+  transform(value) {
+    return value.slice().reverse();
   }
 }

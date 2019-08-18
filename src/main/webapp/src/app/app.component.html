@@ -10,7 +10,7 @@
 
 <router-outlet></router-outlet>
 <div style="padding:20px;margin-top:30px;">
-  <mat-grid-list cols="6" rowHeight="4:1" >
+  <mat-grid-list cols="6" rowHeight="4:1">
     <mat-grid-tile colspan="6">
       <div style="text-align:center">
         <h1>
@@ -18,7 +18,7 @@
         </h1>
       </div>
     </mat-grid-tile>
-    <mat-grid-tile colspan="1"  class="setting-bottom" >
+    <mat-grid-tile colspan="1" class="setting-bottom">
       <mat-form-field>
         <mat-label>initial X coordinate</mat-label>
         <mat-select [(value)]="x">
@@ -52,14 +52,74 @@
       <button mat-raised-button (click)="onDeleteClick()">Delete</button>
       <button mat-raised-button (click)="onClearClick()">Clear</button>
     </mat-grid-tile>
-    <mat-grid-tile colspan="2"  class="setting-bottom" >
+    <mat-grid-tile colspan="2" class="setting-bottom">
       <button (click)="onStartCalculateClick()" mat-raised-button>Start to calculate</button>
     </mat-grid-tile>
-    <mat-grid-tile colspan="4"  class="setting-bottom" >
-        {{this.resultStr}}
+    <mat-grid-tile colspan="4" class="setting-bottom">
+      {{this.resultStr}}
     </mat-grid-tile>
   </mat-grid-list>
-  <mat-grid-list cols="15" rowHeight="1:1" >
-    <mat-grid-tile *ngFor="let number of numbersX" class="cube-grid">{{number}}</mat-grid-tile>
+
+  <!-- simulate the finding location process visually -->
+  <mat-grid-list cols="10" rowHeight="1:6">
+    <mat-grid-tile colspan="7">
+      <div style="width: 80%">
+        <mat-grid-list *ngFor="let nX of numbersX | reverse" cols="16" rowHeight="1:1">
+          <mat-grid-tile>{{nX}}</mat-grid-tile>
+          <!-- the maxX * maxY grid -->
+          <mat-grid-tile *ngFor="let nY of numbersY" class="cube-grid">{{cellStr[nX - 1][nY - 1]}}{{cellHeading[nX - 1][nY - 1]}}</mat-grid-tile>
+        </mat-grid-list>
+        <mat-grid-list cols="16" rowHeight="1:1">
+          <mat-grid-tile></mat-grid-tile>
+          <mat-grid-tile *ngFor="let nY of numbersY">{{nY}}</mat-grid-tile>
+        </mat-grid-list>
+      </div>
+    </mat-grid-tile>
+    <mat-grid-tile colspan="2">
+      <!--      <p>Simulation Panel</p>-->
+      <div style="width: 100%">
+        <mat-grid-list cols="16" rowHeight="1:5">
+          <mat-grid-tile colspan="16" rowspan="2">
+            <p>Initial Information:
+              <br>vertical coordinates -> X ,
+              <br>horizontal coordinates -> Y
+<!--              //  ← → ↑ ↓-->
+              <br>North  ↑
+              <br>South  ↓
+              <br>West   ←
+              <br>East   →
+
+            </p>
+
+          </mat-grid-tile>
+          <mat-grid-tile colspan="16">
+            <p>x: {{x}} and y: {{y}}</p>
+          </mat-grid-tile>
+          <mat-grid-tile colspan="16">
+            <p>Command： {{commandStr}}</p>
+          </mat-grid-tile>
+          <mat-grid-tile colspan="16">
+            <div>
+              <button [disabled]="simulating" (click)="onStartSimulate()" mat-raised-button>Start to simulate</button>
+              <button (click)="reset()" mat-raised-button>Reset</button>
+            </div>
+          </mat-grid-tile>
+          <mat-grid-tile colspan="16" rowspan="2">
+            <mat-list role="list">
+              <mat-list-item role="listitem">Command: {{currentCommand}}</mat-list-item>
+              <mat-list-item role="listitem">Next Command: {{nextCommand}}</mat-list-item>
+              <mat-list-item role="listitem">Current Heading: {{currentHeading}}</mat-list-item>
+              <mat-list-item role="listitem">Current (x,y): ({{currentX}},{{currentY}})</mat-list-item>
+            </mat-list>
+<!--            <div>Next Command: {{currentCommand}}</div>-->
+<!--            <div>Current Heading: {{currentHeading}}</div>-->
+<!--            <div>Current (x,y): ({{x}},{{y}})</div>-->
+          </mat-grid-tile>
+          <mat-grid-tile colspan="16">
+            <button [disabled]="finish" (click)="onSimulateNext()" mat-raised-button>Next Command</button>
+          </mat-grid-tile>
+        </mat-grid-list>
+      </div>
+    </mat-grid-tile>
   </mat-grid-list>
 </div>
