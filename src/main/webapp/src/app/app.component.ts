@@ -167,10 +167,10 @@ export class AppComponent implements OnInit {
     this.iniCellStr();
     this.currentX = this.x;
     this.currentY = this.y;
+    this.currentHeading = HeadingStatusEnum.North;
+    this.commandsToRun = this.commandStr;
     this.cellStr[this.currentX - 1][this.currentY - 1] = "⛩";
     this.cellHeading[this.currentX - 1][this.currentY - 1] = this.getCurrentHeadingImg();
-    this.commandsToRun = this.commandStr;
-    this.currentHeading = HeadingStatusEnum.North;
     // this.getNextCommand();
     this.simulating = true;
 
